@@ -15,7 +15,7 @@ public class Network : MonoBehaviour
         UnityEngine.Debug.Log("连接成功");
         //_client.Connect("127.0.0.1", 20000);
         System.Random random = new System.Random();
-        UserAuthRequest userAuthRequest = new UserAuthRequest() { Id = random.Next(), Token = "" };
+        UserAuthRequest userAuthRequest = new UserAuthRequest() { Id = random.Next(), Token = "test" };
         var response = await _client.SendRequestAsync(userAuthRequest);
         if (!response.IsSuccess())
         {
