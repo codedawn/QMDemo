@@ -6,6 +6,10 @@ public class Network : MonoBehaviour
 {
     private Client _client = new Client();
     public Room room;
+    static Network()
+    {
+        Client.SetNLogConfigPath(Application.streamingAssetsPath + "/Log/NLog.config");
+    }
 
     async void Awake()
     {
@@ -50,7 +54,8 @@ public class Network : MonoBehaviour
     private void OnPush(IPush push)
     {
         Debug.Log(push);
-        MainThreadDispatcher.RunOnMainThread(() => {
+        MainThreadDispatcher.RunOnMainThread(() =>
+        {
             if (push is RoomStatePush roomStatePush)
             {
                 foreach (var player in roomStatePush.playerStates)
@@ -68,7 +73,7 @@ public class Network : MonoBehaviour
             }
             else if (push is AllRewardPush allRewardPush)
             {
-                foreach(RewardState rewardState in allRewardPush.rewardStates)
+                foreach (RewardState rewardState in allRewardPush.rewardStates)
                 {
                     room.AddReward(rewardState);
                 }
@@ -76,11 +81,11 @@ public class Network : MonoBehaviour
         });
     }
 
-    private void OnDestroy()
+    private async void OnDestroy()
     {
         if (_client != null)
         {
-            _client.CloseAsync();
+            await _client.CloseAsync();
         }
     }
 }
