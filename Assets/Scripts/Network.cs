@@ -13,19 +13,21 @@ public class Network : MonoBehaviour
 
     async void Awake()
     {
+        int userId = 3241241;
+        SeqIdWorker idWorker = new SeqIdWorker(userId);
         _client.SetOnPushCallback(OnPush);
         _client.SetOnDisConnectCallback(OnDisConnect);
         await _client.ConnectAsync("127.0.0.1", 20000);
         UnityEngine.Debug.Log("连接成功");
         //_client.Connect("127.0.0.1", 20000);
         System.Random random = new System.Random();
-        UserAuthRequest userAuthRequest = new UserAuthRequest() { Id = IdGenerator.NextId(), Token = "test" };
+        UserAuthRequest userAuthRequest = new UserAuthRequest() { Id = idWorker.NextId(), Token = "test" };
         var response = await _client.SendRequestAsync(userAuthRequest);
         if (!response.IsSuccess())
         {
             Debug.Log(response);
         }
-        UserJoinRequest userJoinRequest = new UserJoinRequest() { Id = IdGenerator.NextId(), UserId = 1 };
+        UserJoinRequest userJoinRequest = new UserJoinRequest() { Id = idWorker.NextId(), UserId = userId };
         var response1 = await _client.SendRequestAsync(userJoinRequest);
         if (!response1.IsSuccess())
         {
